@@ -1,12 +1,12 @@
 # Express Routes Viewer
 
-![Express Routes Viewer Logo](./express-routes-viewer.png){ width=25% }
+![Express Routes Viewer Logo](./media/express-routes-viewer.png){ width=25% }
 
 A VS Code extension that displays all your Express.js routes in a tree view or a graph view!
 
-![Side panel view](./side-panel-view.png)
+![Side panel view](./media/side-panel-view.png)
 
-![Graph view](./graph-view.png)
+![Graph view](./media/graph-view.png)
 
 ## Features
 
