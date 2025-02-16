@@ -6,6 +6,38 @@
     "type": "git",
     "url": "https://github.com/OlivierFortier/express-routes-viewer"
   },
+  "author": {
+    "name": "OlivierFortier",
+    "url": "https://github.com/OlivierFortier"
+  },
+  "contributors": [
+    {"name": "OlivierFortier", "url": "https://github.com/OlivierFortier"}
+  ],
+  "extensionKind": [
+    "workspace",
+    "ui"
+  ],
+  "homepage": "https://github.com/OlivierFortier/express-routes-viewer",
+  "keywords": [
+    "express",
+    "routes",
+    "viewer",
+    "visualizer",
+    "endpoints",
+    "api",
+    "rest",
+    "http",
+    "web",
+    "server",
+    "node"
+  ],
+  "maintainers": [
+    {
+      "name": "OlivierFortier",
+      "url": "https://github.com/OlivierFortier"
+    }
+  ],
+  "publisher": "OlivierFortier",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.97.0"
