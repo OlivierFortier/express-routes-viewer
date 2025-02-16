@@ -1,0 +1,57 @@
+<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+<!--Define a diagonal gradient for the background-->
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3a3a3a"/>
+      <stop offset="100%" stop-color="#1e1e1e"/>
+    </linearGradient>
+<!--Arrow marker for route lines-->
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#ffffff"/>
+    </marker>
+  </defs>
+<!--Background with rounded corners-->
+  <rect x="0" y="0" width="256" height="256" rx="20" fill="url(#bgGradient)"/>
+<!--Lines from the center to various endpoints (with arrow markers)-->
+  <g transform="translate(0,25)">
+  <line x1="128" y1="128" x2="128" y2="50" stroke="#4fc3f7" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="128" y1="128" x2="128" y2="206" stroke="#4fc3f7" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="128" y1="128" x2="50" y2="128" stroke="#4fc3f7" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="128" y1="128" x2="206" y2="128" stroke="#4fc3f7" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="128" y1="128" x2="80" y2="80" stroke="#4fc3f7" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="128" y1="128" x2="176" y2="80" stroke="#4fc3f7" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="128" y1="128" x2="80" y2="176" stroke="#4fc3f7" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="128" y1="128" x2="176" y2="176" stroke="#4fc3f7" stroke-width="3" marker-end="url(#arrow)"/>
+<!--Endpoint nodes-->
+  <circle cx="128" cy="50" r="6" fill="#ffffff"/>
+  <circle cx="128" cy="206" r="6" fill="#ffffff"/>
+  <circle cx="50" cy="128" r="6" fill="#ffffff"/>
+  <circle cx="206" cy="128" r="6" fill="#ffffff"/>
+  <circle cx="80" cy="80" r="6" fill="#ffffff"/>
+  <circle cx="176" cy="80" r="6" fill="#ffffff"/>
+  <circle cx="80" cy="176" r="6" fill="#ffffff"/>
+  <circle cx="176" cy="176" r="6" fill="#ffffff"/>
+<!--Central node with a standout color-->
+  <circle cx="128" cy="128" r="40" fill="#417E38 "/>
+<!--Bold "E" for Express.js-->
+  <text x="127" y="152" font-family="Arial, sans-serif" font-size="68" fill="#ffffff" text-anchor="middle" font-weight="bold">
+    E
+  </text>
+    </g>
+  <!-- API ROUTE -->
+<g transform="scale(4) translate(20, -2)">
+	<rect y="0" fill="none" width="24" height="24"/>
+	<g transform="translate(1.000000, 8.000000)">
+		<path fill-rule="evenodd" fill="#ffffff" d="M2-1.9c-1.1,0-2.3,1.1-2.3,2.2V10H2V5.5h2.2V10h2.2V0.3c0-1.1-1.1-2.2-2.3-2.2H2
+			L2-1.9z M2,3.2v-3h2.2v3H2L2,3.2z"/>
+		<path fill-rule="evenodd" fill="#ffffff" d="M10.3-2C9.1-2,8-0.9,8,0.2V10l2.2,0V5.5h2.2c1.1,0,2.3-1.1,2.3-2.2l0-3
+			c0-1.1-1.1-2.2-2.3-2.2H10.3L10.3-2z M10.2,3.2v-3h2.2v3H10.2L10.2,3.2z"/>
+		<polygon fill-rule="evenodd" fill="#ffffff" points="18.5,0.3 18.5,7.8 16.2,7.8 16.2,10 23,10 23,7.8 20.8,7.8 20.8,0.3 23,0.3 
+			23,-1.9 16.2,-1.9 16.2,0.3 		"/>
+		<polygon fill-rule="evenodd" fill="#E8E8E8" points="2,5.5 2,3.2 3.5,3.2 		"/>
+		<polygon fill-rule="evenodd" fill="#E8E8E8" points="10.2,5.5 10.2,3.2 11.5,3.2 		"/>
+		<polygon fill-rule="evenodd" fill="#E8E8E8" points="18.5,1.8 18.5,1.8 18.5,0.3 20.8,0.3 		"/>
+	</g>
+</g>
+  <!-- END API ROUTE -->
+</svg>
