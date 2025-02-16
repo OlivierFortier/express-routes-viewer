@@ -2,35 +2,30 @@ import * as vscode from 'vscode';
 import { Route } from './routeParser';
 import * as path from 'path';
 
-interface RouteGroup {
-    prefix: string;
-    routes: Route[];
-    subgroups: { [key: string]: RouteGroup };
-}
-
 export class RoutesTreeItem extends vscode.TreeItem {
     constructor(
         public readonly label: string,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState,
         public readonly route?: Route,
-        public readonly routeGroup?: RouteGroup
+        public readonly filePath?: string,
+        public readonly fileRoutes?: Route[]
     ) {
         super(label, collapsibleState);
 
         if (route) {
-            const fileName = path.basename(route.filePath);
-            this.tooltip = `${route.method} ${route.path}\nFile: ${fileName}`;
-            this.description = `${route.method} - ${fileName}`;
+            this.tooltip = `${route.method} ${route.path}`;
+            this.description = route.method;
             this.iconPath = new vscode.ThemeIcon(this.getMethodIcon(route.method));
             this.command = {
                 command: 'vscode.open',
                 title: 'Open File',
                 arguments: [vscode.Uri.file(route.filePath), { selection: new vscode.Range(route.lineNumber - 1, 0, route.lineNumber - 1, 0) }]
             };
-        } else if (routeGroup) {
-            this.tooltip = `${routeGroup.routes.length} routes`;
-            this.description = `${routeGroup.routes.length} routes`;
-            this.iconPath = new vscode.ThemeIcon('folder');
+        } else if (filePath) {
+            const fileName = path.basename(filePath);
+            this.tooltip = `${fileName} (${fileRoutes?.length} routes)`;
+            this.description = `${fileRoutes?.length} routes`;
+            this.iconPath = new vscode.ThemeIcon('file');
         }
     }
 
@@ -51,44 +46,21 @@ export class RoutesTreeDataProvider implements vscode.TreeDataProvider<RoutesTre
     readonly onDidChangeTreeData: vscode.Event<RoutesTreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     private routes: Route[] = [];
-    private rootGroup: RouteGroup = { prefix: '', routes: [], subgroups: {} };
+    private fileGroups: Map<string, Route[]> = new Map();
 
-    private groupRoutes(routes: Route[]): RouteGroup {
-        const root: RouteGroup = { prefix: '', routes: [], subgroups: {} };
-
+    private groupRoutesByFile(routes: Route[]): Map<string, Route[]> {
+        const groups = new Map<string, Route[]>();
         for (const route of routes) {
-            const segments = route.path.split('/').filter(s => s);
-            let currentGroup = root;
-            let currentPath = '';
-
-            if (segments.length === 0) {
-                root.routes.push(route);
-                continue;
-            }
-
-            for (let i = 0; i < segments.length - 1; i++) {
-                const segment = segments[i];
-                currentPath += '/' + segment;
-
-                if (!currentGroup.subgroups[segment]) {
-                    currentGroup.subgroups[segment] = {
-                        prefix: currentPath,
-                        routes: [],
-                        subgroups: {}
-                    };
-                }
-                currentGroup = currentGroup.subgroups[segment];
-            }
-
-            currentGroup.routes.push(route);
+            const existing = groups.get(route.filePath) || [];
+            existing.push(route);
+            groups.set(route.filePath, existing);
         }
-
-        return root;
+        return groups;
     }
 
     refresh(routes: Route[]): void {
         this.routes = routes;
-        this.rootGroup = this.groupRoutes(routes);
+        this.fileGroups = this.groupRoutesByFile(routes);
         this._onDidChangeTreeData.fire();
     }
 
@@ -98,47 +70,31 @@ export class RoutesTreeDataProvider implements vscode.TreeDataProvider<RoutesTre
 
     getChildren(element?: RoutesTreeItem): Thenable<RoutesTreeItem[]> {
         if (!element) {
-            // Root level
+            // Root level - show files
             const items: RoutesTreeItem[] = [];
-
-            // Add root-level routes
-            for (const route of this.rootGroup.routes) {
-                items.push(new RoutesTreeItem(route.path, vscode.TreeItemCollapsibleState.None, route));
-            }
-
-            // Add groups
-            for (const [prefix, group] of Object.entries(this.rootGroup.subgroups)) {
+            for (const [filePath, routes] of this.fileGroups) {
                 items.push(new RoutesTreeItem(
-                    prefix,
+                    path.basename(filePath),
                     vscode.TreeItemCollapsibleState.Collapsed,
                     undefined,
-                    group
+                    filePath,
+                    routes
                 ));
             }
-
-            return Promise.resolve(items);
+            return Promise.resolve(items.sort((a, b) => a.label.localeCompare(b.label)));
         }
 
-        if (element.routeGroup) {
-            const items: RoutesTreeItem[] = [];
-
-            // Add routes in this group
-            for (const route of element.routeGroup.routes) {
-                const relativePath = route.path.substring(element.routeGroup.prefix.length) || '/';
-                items.push(new RoutesTreeItem(relativePath, vscode.TreeItemCollapsibleState.None, route));
-            }
-
-            // Add subgroups
-            for (const [prefix, group] of Object.entries(element.routeGroup.subgroups)) {
-                items.push(new RoutesTreeItem(
-                    prefix,
-                    vscode.TreeItemCollapsibleState.Collapsed,
-                    undefined,
-                    group
-                ));
-            }
-
-            return Promise.resolve(items);
+        if (element.fileRoutes) {
+            // Show routes in the file
+            return Promise.resolve(
+                element.fileRoutes
+                    .sort((a, b) => a.path.localeCompare(b.path))
+                    .map(route => new RoutesTreeItem(
+                        route.path,
+                        vscode.TreeItemCollapsibleState.None,
+                        route
+                    ))
+            );
         }
 
         return Promise.resolve([]);
