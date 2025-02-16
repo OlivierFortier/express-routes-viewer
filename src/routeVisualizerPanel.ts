@@ -209,64 +209,62 @@ export class RouteVisualizerPanel {
     }
 
     private generateMermaidDiagram(routes: Route[]): string {
+        const diagram = 'graph LR\n' +
+            '    %% Method color definitions\n' +
+            '    classDef get fill:#4CAF50,stroke:#2E7D32,color:#fff;\n' +
+            '    classDef post fill:#2196F3,stroke:#1565C0,color:#fff;\n' +
+            '    classDef put fill:#FF9800,stroke:#EF6C00,color:#fff;\n' +
+            '    classDef delete fill:#F44336,stroke:#C62828,color:#fff;\n' +
+            '    classDef patch fill:#9C27B0,stroke:#6A1B9A,color:#fff;\n' +
+            '    classDef options fill:#607D8B,stroke:#37474F,color:#fff;\n' +
+            '    classDef head fill:#795548,stroke:#3E2723,color:#fff;\n' +
+            '    classDef default fill:#78909C,stroke:#37474F,color:#fff;\n\n';
+
+        let nodes = '    root["/"];\n\n';
         const routeGroups = this.groupRoutesByPath(routes);
 
-        let diagram = 'graph LR\n';
-        // Define method-specific styles
-        diagram += '    %% Method color definitions\n';
-        diagram += '    classDef get fill:#4CAF50,stroke:#2E7D32,color:#fff;\n';
-        diagram += '    classDef post fill:#2196F3,stroke:#1565C0,color:#fff;\n';
-        diagram += '    classDef put fill:#FF9800,stroke:#EF6C00,color:#fff;\n';
-        diagram += '    classDef delete fill:#F44336,stroke:#C62828,color:#fff;\n';
-        diagram += '    classDef patch fill:#9C27B0,stroke:#6A1B9A,color:#fff;\n';
-        diagram += '    classDef options fill:#607D8B,stroke:#37474F,color:#fff;\n';
-        diagram += '    classDef head fill:#795548,stroke:#3E2723,color:#fff;\n';
-        diagram += '    classDef default fill:#78909C,stroke:#37474F,color:#fff;\n\n';
-
-        diagram += '    root["/"];\n';
-
-        // Add nodes and connections
+        // Create nodes and connections
         Object.entries(routeGroups).forEach(([path, pathRoutes]) => {
             if (path === '/') {
+                // Root level routes
+                pathRoutes.forEach(route => {
+                    const nodeId = this.getNodeId(`root_${route.method}`);
+                    nodes += `    ${nodeId}["${route.method} /"];\n`;
+                    nodes += `    root --> ${nodeId};\n`;
+                    nodes += `    class ${nodeId} ${route.method.toLowerCase()};\n`;
+                });
                 return;
             }
 
-            const segments = path.split('/').filter(Boolean);
-            let currentPath = '';
+            // Create path node
+            const pathNodeId = this.getNodeId(path);
+            nodes += `    ${pathNodeId}["${path}"];\n`;
+            nodes += `    root --> ${pathNodeId};\n`;
 
-            // Create nodes for each path segment
-            segments.forEach((segment, index) => {
-                const prevPath = currentPath;
-                currentPath += '/' + segment;
-                const nodeId = this.getNodeId(currentPath);
-                const prevNodeId = prevPath ? this.getNodeId(prevPath) : 'root';
-
-                diagram += `    ${nodeId}["${segment}"];\n`;
-                diagram += `    ${prevNodeId} --> ${nodeId};\n`;
-            });
-
-            // Add method nodes as leaves with their respective styles
-            pathRoutes.forEach(route => {
-                const methodNodeId = this.getNodeId(route.path + '_' + route.method);
-                const parentNodeId = this.getNodeId(route.path);
-                diagram += `    ${methodNodeId}["${route.method}"];\n`;
-                diagram += `    ${parentNodeId} --> ${methodNodeId};\n`;
-                diagram += `    class ${methodNodeId} ${route.method.toLowerCase()};\n`;
+            // Add all methods for this path
+            const methodNodes = pathRoutes.map(route => {
+                const methodNodeId = this.getNodeId(`${path}_${route.method}`);
+                nodes += `    ${methodNodeId}["${route.method}"];\n`;
+                nodes += `    ${pathNodeId} --> ${methodNodeId};\n`;
+                nodes += `    class ${methodNodeId} ${route.method.toLowerCase()};\n`;
+                return methodNodeId;
             });
         });
 
-        return diagram;
+        return diagram + nodes;
     }
 
     private groupRoutesByPath(routes: Route[]): Record<string, Route[]> {
-        const groups: Record<string, Route[]> = { '/': [] };
+        const groups: Record<string, Route[]> = {};
+
         routes.forEach(route => {
-            if (route.path in groups) {
-                groups[route.path].push(route);
-            } else {
-                groups[route.path] = [route];
+            const normalizedPath = route.path === '/' ? '/' : route.path.replace(/\/+$/, '');
+            if (!groups[normalizedPath]) {
+                groups[normalizedPath] = [];
             }
+            groups[normalizedPath].push(route);
         });
+
         return groups;
     }
 
