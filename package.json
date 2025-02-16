@@ -40,12 +40,22 @@
         "command": "expressRoutesView.refresh",
         "title": "Refresh Routes",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "extension.visualizeExpressRoutes",
+        "title": "Visualize Express Routes",
+        "icon": "$(type-hierarchy)"
       }
     ],
     "menus": {
       "view/title": [
         {
           "command": "expressRoutesView.refresh",
+          "when": "view == expressRoutesView",
+          "group": "navigation"
+        },
+        {
+          "command": "extension.visualizeExpressRoutes",
           "when": "view == expressRoutesView",
           "group": "navigation"
         }
