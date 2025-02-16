@@ -2,6 +2,10 @@
   "name": "express-routes-viewer",
   "displayName": "express routes viewer",
   "description": "see all your routes in your express app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OlivierFortier/express-routes-viewer"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.97.0"
