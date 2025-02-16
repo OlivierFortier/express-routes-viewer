@@ -42,7 +42,7 @@
     }
   ],
   "publisher": "Olivier-Fortier",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "icon": "media/express-routes-viewer.png",
   "engines": {
     "vscode": "^1.97.0"

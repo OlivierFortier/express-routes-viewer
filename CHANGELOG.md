@@ -4,7 +4,12 @@ All notable changes to the "express-routes-viewer" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [0.0.3] - 2024-03-14
+## [0.0.5] - 2025-02-16
+
+### Added
+- Added support for varying decorators and methods (such as NestJS and routing-controllers and Nestia typed routes).
+
+## [0.0.3] - 2025-02-16
 
 ### Added
 - Support for sorting routes by method, path or file

@@ -73,6 +73,7 @@ You can configure the file patterns and exclusions in the settings.
 - Added sorting options for routes.
 - Added refresh button to update the route list.
 - Support TypeScript and JavaScript files.
+- Added support for varying decorators and methods (such as NestJS and routing-controllers and Nestia typed routes).
 
 ## License
 

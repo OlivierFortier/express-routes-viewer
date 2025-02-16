@@ -118,11 +118,14 @@ export class RouteParser {
             }
 
             // Check for method decorators
-            const decoratorMatch = line.match(/@(Get|Post|Put|Delete|Patch|Options|Head|httpGet|httpPost|httpDelete|httpPut|httpPatch|httpHead|httpOptions|All|httpMethod)\s*\(['"]?(.*?)['"]?\)/i);
+            // Check for NestJS/Nestia decorators
+            const decoratorMatch = line.match(/@(Get|Post|Put|Delete|Patch|Options|Head|httpGet|httpPost|httpDelete|httpPut|httpPatch|httpHead|httpOptions|All|httpMethod|TypedRoute\.Get|TypedRoute\.Post|TypedRoute\.Put|TypedRoute\.Delete|TypedRoute\.Patch|TypedRoute\.Options|TypedRoute\.Head|core\.TypedRoute\.Get|core\.TypedRoute\.Post|core\.TypedRoute\.Put|core\.TypedRoute\.Delete|core\.TypedRoute\.Patch|core\.TypedRoute\.Options|core\.TypedRoute\.Head)\s*\(['"]?(.*?)['"]?\)/i);
             if (decoratorMatch) {
                 let method = decoratorMatch[1].toUpperCase();
                 // Remove 'HTTP' prefix if present
                 method = method.replace(/^HTTP/, '');
+                // Remove TypedRoute. or core.TypedRoute. prefix if present
+                method = method.replace(/^(?:CORE\.)?TYPEDROUTE\./, '');
                 const path = decoratorMatch[2] || '/';
                 const fullPath = this.combinePaths(classBaseRoute, path);
                 this.addRoute(method, fullPath, filePath, i + 1);
