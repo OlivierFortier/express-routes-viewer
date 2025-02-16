@@ -218,37 +218,29 @@ export class RouteVisualizerPanel {
             '    classDef patch fill:#9C27B0,stroke:#6A1B9A,color:#fff;\n' +
             '    classDef options fill:#607D8B,stroke:#37474F,color:#fff;\n' +
             '    classDef head fill:#795548,stroke:#3E2723,color:#fff;\n' +
+            '    classDef file fill:#546E7A,stroke:#263238,color:#fff;\n' + // Add file node style
             '    classDef default fill:#78909C,stroke:#37474F,color:#fff;\n\n';
 
         let nodes = '    root["/"];\n\n';
         const routeGroups = this.groupRoutesByPath(routes);
+        const fileGroups = this.groupRoutesByFile(routes);
 
-        // Create nodes and connections
-        Object.entries(routeGroups).forEach(([path, pathRoutes]) => {
-            if (path === '/') {
-                // Root level routes
-                pathRoutes.forEach(route => {
-                    const nodeId = this.getNodeId(`root_${route.method}`);
-                    nodes += `    ${nodeId}["${route.method} /"];\n`;
-                    nodes += `    root --> ${nodeId};\n`;
-                    nodes += `    class ${nodeId} ${route.method.toLowerCase()};\n`;
-                });
-                return;
-            }
+        // Create file nodes first
+        Object.entries(fileGroups).forEach(([filePath, fileRoutes]) => {
+            const fileNodeId = this.getNodeId(`file_${filePath}`);
+            const fileName = filePath.split('/').pop() || filePath;
+            nodes += `    ${fileNodeId}["${fileName}"];\n`;
+            nodes += `    root --> ${fileNodeId};\n`;
+            nodes += `    class ${fileNodeId} file;\n\n`;
 
-            // Create path node
-            const pathNodeId = this.getNodeId(path);
-            nodes += `    ${pathNodeId}["${path}"];\n`;
-            nodes += `    root --> ${pathNodeId};\n`;
-
-            // Add all methods for this path
-            const methodNodes = pathRoutes.map(route => {
-                const methodNodeId = this.getNodeId(`${path}_${route.method}`);
-                nodes += `    ${methodNodeId}["${route.method}"];\n`;
-                nodes += `    ${pathNodeId} --> ${methodNodeId};\n`;
-                nodes += `    class ${methodNodeId} ${route.method.toLowerCase()};\n`;
-                return methodNodeId;
+            // Add routes for this file
+            fileRoutes.forEach(route => {
+                const routeNodeId = this.getNodeId(`route_${filePath}_${route.method}_${route.path}`);
+                nodes += `    ${routeNodeId}["${route.method} ${route.path}"];\n`;
+                nodes += `    ${fileNodeId} --> ${routeNodeId};\n`;
+                nodes += `    class ${routeNodeId} ${route.method.toLowerCase()};\n`;
             });
+            nodes += '\n';
         });
 
         return diagram + nodes;
@@ -265,6 +257,17 @@ export class RouteVisualizerPanel {
             groups[normalizedPath].push(route);
         });
 
+        return groups;
+    }
+
+    private groupRoutesByFile(routes: Route[]): Record<string, Route[]> {
+        const groups: Record<string, Route[]> = {};
+        routes.forEach(route => {
+            if (!groups[route.filePath]) {
+                groups[route.filePath] = [];
+            }
+            groups[route.filePath].push(route);
+        });
         return groups;
     }
 

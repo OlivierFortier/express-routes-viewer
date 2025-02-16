@@ -42,9 +42,9 @@
     }
   ],
   "publisher": "Olivier-Fortier",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
-    "vscode": "^1.97.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other",
