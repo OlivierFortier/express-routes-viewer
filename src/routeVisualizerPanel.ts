@@ -39,7 +39,7 @@ export class RouteVisualizerPanel {
         this._panel.webview.html = this.getWebviewContent(routes);
     }
 
-    private getWebviewContent(routes: Route[]) {
+    private getWebviewContent(routes: Route[]): string {
         const mermaidDefinition = this.generateMermaidDiagram(routes);
 
         return `<!DOCTYPE html>
@@ -112,7 +112,19 @@ export class RouteVisualizerPanel {
             <script>
                 mermaid.initialize({
                     startOnLoad: true,
-                    theme: document.body.classList.contains('vscode-dark') ? 'dark' : 'default'
+                    theme: document.body.classList.contains('vscode-dark') ? 'dark' : 'default',
+                    themeVariables: {
+                        darkMode: document.body.classList.contains('vscode-dark'),
+                        primaryColor: '#42A5F5',
+                        primaryBorderColor: '#1E88E5',
+                        primaryTextColor: '#fff',
+                        secondaryColor: '#78909C',
+                        secondaryBorderColor: '#455A64',
+                        secondaryTextColor: '#fff',
+                        tertiaryColor: '#90A4AE',
+                        tertiaryBorderColor: '#546E7A',
+                        tertiaryTextColor: '#fff'
+                    }
                 });
 
                 let zoom = 1;
@@ -199,7 +211,18 @@ export class RouteVisualizerPanel {
     private generateMermaidDiagram(routes: Route[]): string {
         const routeGroups = this.groupRoutesByPath(routes);
 
-        let diagram = 'graph LR\n';  // Changed from TD to LR for left-to-right orientation
+        let diagram = 'graph LR\n';
+        // Define method-specific styles
+        diagram += '    %% Method color definitions\n';
+        diagram += '    classDef get fill:#4CAF50,stroke:#2E7D32,color:#fff;\n';
+        diagram += '    classDef post fill:#2196F3,stroke:#1565C0,color:#fff;\n';
+        diagram += '    classDef put fill:#FF9800,stroke:#EF6C00,color:#fff;\n';
+        diagram += '    classDef delete fill:#F44336,stroke:#C62828,color:#fff;\n';
+        diagram += '    classDef patch fill:#9C27B0,stroke:#6A1B9A,color:#fff;\n';
+        diagram += '    classDef options fill:#607D8B,stroke:#37474F,color:#fff;\n';
+        diagram += '    classDef head fill:#795548,stroke:#3E2723,color:#fff;\n';
+        diagram += '    classDef default fill:#78909C,stroke:#37474F,color:#fff;\n\n';
+
         diagram += '    root["/"];\n';
 
         // Add nodes and connections
@@ -222,12 +245,13 @@ export class RouteVisualizerPanel {
                 diagram += `    ${prevNodeId} --> ${nodeId};\n`;
             });
 
-            // Add method nodes as leaves
+            // Add method nodes as leaves with their respective styles
             pathRoutes.forEach(route => {
                 const methodNodeId = this.getNodeId(route.path + '_' + route.method);
                 const parentNodeId = this.getNodeId(route.path);
                 diagram += `    ${methodNodeId}["${route.method}"];\n`;
                 diagram += `    ${parentNodeId} --> ${methodNodeId};\n`;
+                diagram += `    class ${methodNodeId} ${route.method.toLowerCase()};\n`;
             });
         });
 
