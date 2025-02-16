@@ -1,0 +1,108 @@
+{
+  "name": "express-routes-viewer",
+  "displayName": "express routes viewer",
+  "description": "see all your routes in your express app",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.97.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.showExpressRoutes"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "express-routes-explorer",
+          "title": "Express Routes",
+          "icon": "$(symbol-method)"
+        }
+      ]
+    },
+    "views": {
+      "express-routes-explorer": [
+        {
+          "id": "expressRoutesView",
+          "name": "Routes"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "extension.showExpressRoutes",
+        "title": "Show Express Routes"
+      },
+      {
+        "command": "expressRoutesView.refresh",
+        "title": "Refresh Routes",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "expressRoutesView.refresh",
+          "when": "view == expressRoutesView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Express Routes Viewer",
+      "properties": {
+        "expressRoutesViewer.includePattern": {
+          "type": "string",
+          "default": "**/*.{js,ts}",
+          "description": "Glob pattern for files to search for routes (e.g., 'src/**/*.js' for JavaScript files in src folder)"
+        },
+        "expressRoutesViewer.excludeFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "node_modules",
+            "dist",
+            "build"
+          ],
+          "description": "Folders to exclude from route search"
+        },
+        "expressRoutesViewer.sortBy": {
+          "type": "string",
+          "enum": [
+            "method",
+            "path",
+            "file"
+          ],
+          "default": "path",
+          "description": "How to sort the routes in the view"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.97.0",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/parser": "^8.22.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.19.0",
+    "glob": "^8.1.0",
+    "typescript": "^5.7.3"
+  }
+}
