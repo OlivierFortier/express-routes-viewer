@@ -118,7 +118,7 @@ export class RouteParser {
             }
 
             // Check for method decorators
-            const decoratorMatch = line.match(/@(Get|Post|Put|Delete|Patch|Options|Head)\s*\(['"]?(.*?)['"]?\)/i);
+            const decoratorMatch = line.match(/@(Get|Post|Put|Delete|Patch|Options|Head|httpGet|httpPost|httpDelete|httpPut|httpPatch|httpHead|httpOptions|All|httpMethod)\s*\(['"]?(.*?)['"]?\)/i);
             if (decoratorMatch) {
                 const method = decoratorMatch[1].toUpperCase();
                 const path = decoratorMatch[2] || '/';
