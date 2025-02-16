@@ -197,10 +197,9 @@ export class RouteVisualizerPanel {
     }
 
     private generateMermaidDiagram(routes: Route[]): string {
-        // Group routes by their base path segments
         const routeGroups = this.groupRoutesByPath(routes);
 
-        let diagram = 'graph TD\n';
+        let diagram = 'graph LR\n';  // Changed from TD to LR for left-to-right orientation
         diagram += '    root["/"];\n';
 
         // Add nodes and connections
