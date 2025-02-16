@@ -111,7 +111,7 @@ export class RouteParser {
             inRouterContext = this.isRouterContext(line, routerVariables) || inRouterContext;
 
             // Check for class-level route decorators
-            const controllerMatch = line.match(/@(?:Controller|Route|Router|JsonRouter)\s*\(['"]?(.*?)['"]?\)/);
+            const controllerMatch = line.match(/@(?:Controller|Route|Router|JsonRouter|controller|route|router|jsonrouter)\s*\(['"]?(.*?)['"]?\)/i);
             if (controllerMatch) {
                 classBaseRoute = controllerMatch[1] || '';
                 continue;
@@ -120,7 +120,9 @@ export class RouteParser {
             // Check for method decorators
             const decoratorMatch = line.match(/@(Get|Post|Put|Delete|Patch|Options|Head|httpGet|httpPost|httpDelete|httpPut|httpPatch|httpHead|httpOptions|All|httpMethod)\s*\(['"]?(.*?)['"]?\)/i);
             if (decoratorMatch) {
-                const method = decoratorMatch[1].toUpperCase();
+                let method = decoratorMatch[1].toUpperCase();
+                // Remove 'HTTP' prefix if present
+                method = method.replace(/^HTTP/, '');
                 const path = decoratorMatch[2] || '/';
                 const fullPath = this.combinePaths(classBaseRoute, path);
                 this.addRoute(method, fullPath, filePath, i + 1);
@@ -169,10 +171,10 @@ export class RouteParser {
     private isRouterContext(line: string, routerVariables: Set<string>): boolean {
         // Check if line contains express/router initialization or usage
         const routerPatterns = [
-            /express\(\)/,
-            /express\.Router\(\)/,
-            /Router\(\)/,
-            ...Array.from(routerVariables).map(v => new RegExp(`${v}\\.(get|post|put|delete|patch|use)`))
+            /express\(\)/i,
+            /express\.Router\(\)/i,
+            /Router\(\)/i,
+            ...Array.from(routerVariables).map(v => new RegExp(`${v}\\.(get|post|put|delete|patch|use)`, 'i'))
         ];
         return routerPatterns.some(pattern => pattern.test(line));
     }

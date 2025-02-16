@@ -38,11 +38,16 @@ export class RoutesTreeItem extends vscode.TreeItem {
 
     private getMethodIcon(method: string): string {
         switch (method.toLowerCase()) {
-            case 'get': return 'symbol-array';
+            case 'get' : return 'symbol-array';
+            case 'httpget': return 'symbol-array';
             case 'post': return 'add';
+            case 'httppost': return 'add';
             case 'put': return 'edit';
+            case 'httpput': return 'edit';
             case 'delete': return 'trash';
+            case 'httpdelete': return 'trash';
             case 'patch': return 'sync';
+            case 'httppatch': return 'sync';
             default: return 'symbol-method';
         }
     }
@@ -51,13 +56,23 @@ export class RoutesTreeItem extends vscode.TreeItem {
         switch (method.toLowerCase()) {
             case 'get':
                 return new vscode.ThemeColor('expressRoutesViewer.getMethodColor');
+            case 'httpget':
+                return new vscode.ThemeColor('expressRoutesViewer.getMethodColor');
             case 'post':
+                return new vscode.ThemeColor('expressRoutesViewer.postMethodColor');
+            case 'httppost':
                 return new vscode.ThemeColor('expressRoutesViewer.postMethodColor');
             case 'put':
                 return new vscode.ThemeColor('expressRoutesViewer.putMethodColor');
+            case 'httpput':
+                return new vscode.ThemeColor('expressRoutesViewer.putMethodColor');
             case 'delete':
                 return new vscode.ThemeColor('expressRoutesViewer.deleteMethodColor');
+            case 'httpdelete':
+                return new vscode.ThemeColor('expressRoutesViewer.deleteMethodColor');
             case 'patch':
+                return new vscode.ThemeColor('expressRoutesViewer.patchMethodColor');
+            case 'httppatch':
                 return new vscode.ThemeColor('expressRoutesViewer.patchMethodColor');
             default:
                 return undefined;

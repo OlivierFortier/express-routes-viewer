@@ -212,12 +212,19 @@ export class RouteVisualizerPanel {
         const diagram = 'graph LR\n' +
             '    %% Method color definitions\n' +
             '    classDef get fill:#4CAF50,stroke:#2E7D32,color:#fff;\n' +
+            '    classDef httpget fill:#4CAF50,stroke:#2E7D32,color:#fff;\n' +
             '    classDef post fill:#2196F3,stroke:#1565C0,color:#fff;\n' +
+            '    classDef httppost fill:#2196F3,stroke:#1565C0,color:#fff;\n' +
             '    classDef put fill:#FF9800,stroke:#EF6C00,color:#fff;\n' +
+            '    classDef httpput fill:#FF9800,stroke:#EF6C00,color:#fff;\n' +
             '    classDef delete fill:#F44336,stroke:#C62828,color:#fff;\n' +
+            '    classDef httpdelete fill:#F44336,stroke:#C62828,color:#fff;\n' +
             '    classDef patch fill:#9C27B0,stroke:#6A1B9A,color:#fff;\n' +
+            '    classDef httppatch fill:#9C27B0,stroke:#6A1B9A,color:#fff;\n' +
             '    classDef options fill:#607D8B,stroke:#37474F,color:#fff;\n' +
+            '    classDef httpoptions fill:#607D8B,stroke:#37474F,color:#fff;\n' +
             '    classDef head fill:#795548,stroke:#3E2723,color:#fff;\n' +
+            '    classDef httphead fill:#795548,stroke:#3E2723,color:#fff;\n' +
             '    classDef file fill:#546E7A,stroke:#263238,color:#fff;\n' + // Add file node style
             '    classDef default fill:#78909C,stroke:#37474F,color:#fff;\n\n';
 
