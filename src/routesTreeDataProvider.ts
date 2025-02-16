@@ -15,7 +15,14 @@ export class RoutesTreeItem extends vscode.TreeItem {
         if (route) {
             this.tooltip = `${route.method} ${route.path}`;
             this.description = route.method;
-            this.iconPath = new vscode.ThemeIcon(this.getMethodIcon(route.method));
+            const methodColor = this.getMethodThemeColor(route.method);
+
+            // Set method color using ThemeColor for the icon
+            this.iconPath = new vscode.ThemeIcon(
+                this.getMethodIcon(route.method),
+                methodColor
+            );
+
             this.command = {
                 command: 'vscode.open',
                 title: 'Open File',
@@ -37,6 +44,23 @@ export class RoutesTreeItem extends vscode.TreeItem {
             case 'delete': return 'trash';
             case 'patch': return 'sync';
             default: return 'symbol-method';
+        }
+    }
+
+    private getMethodThemeColor(method: string): vscode.ThemeColor | undefined {
+        switch (method.toLowerCase()) {
+            case 'get':
+                return new vscode.ThemeColor('expressRoutesViewer.getMethodColor');
+            case 'post':
+                return new vscode.ThemeColor('expressRoutesViewer.postMethodColor');
+            case 'put':
+                return new vscode.ThemeColor('expressRoutesViewer.putMethodColor');
+            case 'delete':
+                return new vscode.ThemeColor('expressRoutesViewer.deleteMethodColor');
+            case 'patch':
+                return new vscode.ThemeColor('expressRoutesViewer.patchMethodColor');
+            default:
+                return undefined;
         }
     }
 }

@@ -132,7 +132,54 @@
           "description": "How to sort the routes in the view"
         }
       }
-    }
+    },
+    "colors": [
+      {
+        "id": "expressRoutesViewer.getMethodColor",
+        "description": "Color for GET method routes",
+        "defaults": {
+          "dark": "#4CAF50",
+          "light": "#2E7D32",
+          "highContrast": "#4CAF50"
+        }
+      },
+      {
+        "id": "expressRoutesViewer.postMethodColor",
+        "description": "Color for POST method routes",
+        "defaults": {
+          "dark": "#2196F3",
+          "light": "#1565C0",
+          "highContrast": "#2196F3"
+        }
+      },
+      {
+        "id": "expressRoutesViewer.putMethodColor",
+        "description": "Color for PUT method routes",
+        "defaults": {
+          "dark": "#FF9800",
+          "light": "#EF6C00",
+          "highContrast": "#FF9800"
+        }
+      },
+      {
+        "id": "expressRoutesViewer.deleteMethodColor",
+        "description": "Color for DELETE method routes",
+        "defaults": {
+          "dark": "#F44336",
+          "light": "#C62828",
+          "highContrast": "#F44336"
+        }
+      },
+      {
+        "id": "expressRoutesViewer.patchMethodColor",
+        "description": "Color for PATCH method routes",
+        "defaults": {
+          "dark": "#9C27B0",
+          "light": "#6A1B9A",
+          "highContrast": "#9C27B0"
+        }
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
